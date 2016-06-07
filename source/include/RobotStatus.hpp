@@ -51,31 +51,31 @@
 
 namespace r2d2{
 
-	class RobotStatus{
-		public:
-			//!@brief Initializes private members with the given parameters.
-			//!@param coordinate_attitude object which contains the robots current location and orientation.
-			//!@param speed this object will represent the robots current speed.
-			RobotStatus(CoordinateAttitude & coordinate_attitude, r2d2::Speed & speed):
-			current_coordinate_attitude(coordinate_attitude),
-			current_speed(speed)
-			{}	
-			
-			//!@brief Getter for current_coordinate_attitude,
-			//!@brief returns a reference to LockingSharedObject current_coordinate_attitude.
-			LockingSharedObject<CoordinateAttitude> & get_current_coordinate_attitude() {
-				return current_coordinate_attitude;
-			}		
-			
-			//!@brief Getter for current_speed,
-			//!@brief returns a reference to LockingSharedObject current_speed.
-			LockingSharedObject<r2d2::Speed> & get_current_speed() {
-				return current_speed;
-			}
-		
-		private:
-			LockingSharedObject<CoordinateAttitude> current_coordinate_attitude;
-			LockingSharedObject<r2d2::Speed> current_speed;
-	};
+    class RobotStatus{
+        public:
+            //!@brief Initializes private members with the given parameters.
+            //!@param coordinate_attitude object which contains the robots current location and orientation.
+            //!@param speed this object will represent the robots current speed.
+            RobotStatus(CoordinateAttitude & coordinate_attitude, r2d2::Speed & speed):
+            current_coordinate_attitude(coordinate_attitude),
+            current_speed(speed)
+            {}  
+            
+            //!@brief Getter for current_coordinate_attitude,
+            //!@brief returns a reference to LockingSharedObject current_coordinate_attitude.
+            LockingSharedObject<CoordinateAttitude> & get_current_coordinate_attitude() {
+                return current_coordinate_attitude;
+            }       
+            
+            //!@brief Getter for current_speed,
+            //!@brief returns a reference to LockingSharedObject current_speed.
+            LockingSharedObject<r2d2::Speed> & get_current_speed() {
+                return current_speed;
+            }
+        
+        private:
+            LockingSharedObject<CoordinateAttitude> current_coordinate_attitude;
+            LockingSharedObject<r2d2::Speed> current_speed;
+    };
 }
 #endif
