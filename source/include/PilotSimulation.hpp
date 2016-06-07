@@ -1,5 +1,5 @@
 //! \addtogroup 0006 Pilot Simulation
-//! \brief PilotSimulation is an Pilot which will simulate a driving pilot.
+//! \brief PilotSimulation is a Pilot which will simulate a driving pilot.
 //!
 //! \file   Pilot.hpp
 //! \author Timon van den Brink 1664554
@@ -50,14 +50,24 @@
 
 #include "Pilot.hpp"
 
-/**
-* @class PilotSimulation
-* @brief The class Pilot is an interface for all movable vehicles.
-*/
+
 
 namespace r2d2{
-
+ 
+ 
+	//! @author     Timon van den Brink 1664554
+	//! @date       06-06-16
+	//! @version    1.0
+	//! @brief      The PilotSimulation class is a class that will simmulate a driving pilot
+	//!             It contains a rotation speed attribute, speed and a waypoint attribute.
+	//!
+	//!
 class PilotSimulation : public Pilot{
+	
+	//!
+	//!@brief      Initializes private member robot_status which is a reference. Speed , rotation_speed and waypoints. 
+	//!@param      robot_status object containing actual information about the robot.
+	//!
 	public:
 		PilotSimulation(RobotStatus & robot_status, r2d2::Speed speed, Rotation rotation_speed, CoordinateAttitude waypoint):
 		Pilot(robot_status),
@@ -66,11 +76,19 @@ class PilotSimulation : public Pilot{
 		waypoint(waypoint)
 		{}
 		
+		//!
+		//!@brief Interface function which will take care of the movement. it wards coordinates on the map
+		//!@brief to the given parameter coordinate_attitude.
+		//!@param coordinate_attitude the new position and orientation where the robot needs to go.
+		//!
 		void go_to_position(const CoordinateAttitude & coordinate_attitude) override{			
 			CoordinateAttitude & waypoint_data = LockingSharedObject<CoordinateAttitude>::Accessor(waypoint).access();
             waypoint_data = coordinate_attitude;
 		}
 		
+		//!
+		//!@brief     function that periodicly simulates the motor management    
+		//!
 		void run(){
 			std::this_thread::sleep_for(std::chrono::seconds(1));
 			int period_ms = 100;
@@ -123,6 +141,10 @@ class PilotSimulation : public Pilot{
 			}
 		}
 		
+		
+		//!
+		//!@brief     checks if pilot has reached waypoint   
+		//!@return    bool 
 	    bool has_reached_waypoint(){	
 		    LockingSharedObject<CoordinateAttitude>::Accessor acc(waypoint);
 		    CoordinateAttitude & waypoint_data = acc.access();

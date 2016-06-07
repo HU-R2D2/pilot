@@ -44,19 +44,30 @@
 #include "RobotStatus.hpp"
 
 namespace r2d2{
-
+	
+	//! @author     Timon van den Brink 1664554
+	//! @date       07-06-16
+	//! @version    1.0
+	//! @brief      Pilot is an abstraction for any movable vehicle it contains 1 robot_status attribute
+	//!	and is responsible for movement
+	//!			
 	class Pilot{
 		public:
-			//!@brief Initializes private member robot_status which is a reference
-			//!@brief and contains the actual information about the robot.
+			
+			//!
+			//!@brief      Initializes private member robot_status which is a reference 
+			//!      	   and contains the actual information about the robot.
 			//!@param robot_status object containing actual information about the robot.
+			//!
 			Pilot(RobotStatus & robot_status):
 			robot_status(robot_status)
 			{}
-		
-			//!@brief Interface function which will take care of the movement
+			
+			//!
+			//!@brief Interface function which will take care of the movement. it wards coordinates on the map
 			//!@brief to the given parameter coordinate_attitude.
 			//!@param coordinate_attitude the new position and orientation where the robot needs to go.
+			//!
 			virtual void go_to_position(const CoordinateAttitude & coordinate_attitude) = 0;
 		
 		protected:
