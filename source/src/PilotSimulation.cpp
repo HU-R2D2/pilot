@@ -45,133 +45,86 @@
 namespace r2d2 {
 
     PilotSimulation::PilotSimulation(RobotStatus & robot_status,
-        r2d2::Speed speed, Rotation rotation_speed,CoordinateAttitude waypoint):
-        Pilot(robot_status),
-        speed(speed),
-        rotation_speed(rotation_speed),
-        waypoint(waypoint) {}
+        r2d2::Speed speed, Rotation rotation_speed,
+        CoordinateAttitude waypoint):
+            Pilot(robot_status),
+            speed(speed),
+            rotation_speed(rotation_speed),
+            waypoint(waypoint)
+    {}
 
     void PilotSimulation::go_to_position(const CoordinateAttitude &
         coordinate_attitude){
-             SharedObject<CoordinateAttitude>::Accessor(waypoint).access()
-                 = coordinate_attitude;
-        }
+        SharedObject<CoordinateAttitude>::Accessor(waypoint).access()
+            = coordinate_attitude;
+        start();
+    }
 
     void PilotSimulation::run() {
-            std::this_thread::sleep_for(std::chrono::seconds(1));
-            int period_ms = 100;
-            int idle_time_ms = 0;
-            int angle_precision_margin = 0.087;
-            while (true) {
-                if (!has_reached_waypoint()) {
-                    idle_time_ms = 0;
-                    //get access to waypoint
-                    LockingSharedObject < CoordinateAttitude >::Accessor
-                        acc(waypoint);
-                    CoordinateAttitude & waypoint_data = acc.access();
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        int period_ms = 100;
+        r2d2::Angle angle_precision_margin(0.087 * r2d2::Angle::rad);
+        while (true) {
+            if (get_enabled()) {
+                //get access to waypoint
+                LockingSharedObject < CoordinateAttitude >::Accessor
+                    acc(waypoint);
+                CoordinateAttitude & waypoint_data = acc.access();
 
-                    //get RobotStatus object
-                    LockingSharedObject < CoordinateAttitude >
-                        & temp_robot_status =
-                        robot_status.get_current_coordinate_attitude();
+                //get RobotStatus object
+                LockingSharedObject < CoordinateAttitude >
+                    & temp_robot_status =
+                    robot_status.get_current_coordinate_attitude();
 
-                    CoordinateAttitude & coordinate_attitude =
-                        SharedObject < CoordinateAttitude >
-                            ::Accessor(temp_robot_status).access();
+                CoordinateAttitude & coordinate_attitude =
+                    SharedObject < CoordinateAttitude >
+                        ::Accessor(temp_robot_status).access();
 
-                    r2d2::Coordinate & my_coordinate =
-                       coordinate_attitude.coordinate;
-                    r2d2::Angle & my_angle =
-                       coordinate_attitude.attitude.angle_z;
+                r2d2::Coordinate & my_coordinate =
+                   coordinate_attitude.coordinate;
+                r2d2::Angle & my_angle =
+                   coordinate_attitude.attitude.angle_z;
 
-                    //waypoint_angle between waypoint and current_position
-                    r2d2::Translation my_translation(
-                        waypoint_data.coordinate.get_x() -
-                           my_coordinate.get_x(),
-                        waypoint_data.coordinate.get_y() -
-                           my_coordinate.get_y(), 0 * r2d2::Length::METER);
+                //waypoint_angle between waypoint and current_position
+                r2d2::Translation my_translation(
+                    waypoint_data.coordinate.get_x() -
+                       my_coordinate.get_x(),
+                    waypoint_data.coordinate.get_y() -
+                       my_coordinate.get_y(), 0 * r2d2::Length::METER);
 
-                    r2d2::Angle waypoint_angle =
-                        std::atan2(my_translation.get_y()
-                        / r2d2::Length::METER, my_translation.get_x()
-                        / r2d2::Length::METER) * r2d2::Angle::rad;
+                r2d2::Angle waypoint_angle =
+                    std::atan2(my_translation.get_y()
+                    / r2d2::Length::METER, my_translation.get_x()
+                    / r2d2::Length::METER) * r2d2::Angle::rad;
 
-                    if (my_angle.get_angle() <= waypoint_angle.get_angle()
-                           + angle_precision_margin
-                        && my_angle.get_angle() >= waypoint_angle.get_angle()
-                           - angle_precision_margin) {
-                        my_coordinate += {
-                            (std::cos(my_angle.get_angle())
-                                * speed
-                                / (r2d2::Length::METER
-                                / r2d2::Duration::SECOND))
-                                * r2d2::Length::METER,
-                            (std::sin(my_angle.get_angle()) * speed
-                                / (r2d2::Length::METER
-                                / r2d2::Duration::SECOND))
-                                * r2d2::Length::METER,
-                            0 * r2d2::Length::METER
-                        };
+                if (my_angle.get_angle() <= waypoint_angle.get_angle()
+                       + angle_precision_margin.get_angle()
+                    && my_angle.get_angle() >= waypoint_angle.get_angle()
+                       - angle_precision_margin.get_angle()) {
+                    my_coordinate += {
+                        (std::cos(my_angle.get_angle())
+                            * speed
+                            / (r2d2::Length::METER
+                            / r2d2::Duration::SECOND))
+                            * r2d2::Length::METER,
+                        (std::sin(my_angle.get_angle()) * speed
+                            / (r2d2::Length::METER
+                            / r2d2::Duration::SECOND))
+                            * r2d2::Length::METER,
+                        0 * r2d2::Length::METER
+                    };
+                } else {
+                    if (my_angle.get_angle() < waypoint_angle.get_angle()) {
+                        my_angle += rotation_speed.rotation
+                        * r2d2::Angle::rad;
                     } else {
-                        if (my_angle.get_angle() < waypoint_angle.get_angle()) {
-                            my_angle += rotation_speed.rotation
-                            * r2d2::Angle::rad;
-                        } else {
-                            my_angle -= rotation_speed.rotation
-                            * r2d2::Angle::rad;
-                        }
-                    }
-
-                }
-                std::this_thread::sleep_for(
-                    std::chrono::milliseconds(period_ms));
-            }
-        }
-         bool PilotSimulation::has_reached_waypoint() {
-             double waypoint_precision_margin = 3;
-             double angle_precision_margin = 0.087;
-            LockingSharedObject < CoordinateAttitude > ::Accessor acc(waypoint);
-            CoordinateAttitude & waypoint_data = acc.access();
-
-            LockingSharedObject < CoordinateAttitude > & temp_robot_status =
-                robot_status.get_current_coordinate_attitude();
-
-            CoordinateAttitude & coordinate_attitude =
-                SharedObject < CoordinateAttitude >
-                ::Accessor(temp_robot_status).access();
-            Attitude & my_attitude = coordinate_attitude.attitude;
-            r2d2::Coordinate & my_coordinate = coordinate_attitude.coordinate;
-
-            if (my_coordinate.get_x() < (waypoint_data.coordinate
-                + r2d2::Translation {
-                    waypoint_precision_margin * r2d2::Length::METER, 0
-                    * r2d2::Length::METER, 0 * r2d2::Length::METER
-                }).get_x() && my_coordinate.get_x() > (waypoint_data.coordinate
-                    - r2d2::Translation {
-                    waypoint_precision_margin * r2d2::Length::METER, 0
-                    * r2d2::Length::METER, 0 * r2d2::Length::METER
-                }).get_x()) {
-                if (my_coordinate.get_y() < (waypoint_data.coordinate
-                    + r2d2::Translation {
-                        0 * r2d2::Length::METER, waypoint_precision_margin
-                        * r2d2::Length::METER, 0 * r2d2::Length::METER
-                    }).get_y() && my_coordinate.get_y()
-                    > (waypoint_data.coordinate - r2d2::Translation {
-                        0 * r2d2::Length::METER, waypoint_precision_margin
-                        * r2d2::Length::METER, 0 * r2d2::Length::METER
-                    }).get_y()) {
-                    if (my_attitude.angle_z.get_angle()
-                        < waypoint_data.attitude.angle_z.get_angle()
-                        + angle_precision_margin
-                    && my_attitude.angle_z.get_angle()
-                        > waypoint_data.attitude.angle_z.get_angle()
-                        - angle_precision_margin) {
-                        return true;
+                        my_angle -= rotation_speed.rotation
+                        * r2d2::Angle::rad;
                     }
                 }
             }
-            return false;
+            std::this_thread::sleep_for(
+                std::chrono::milliseconds(period_ms));
         }
-
-
+    }
 }

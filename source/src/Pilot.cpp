@@ -42,9 +42,24 @@
 
 #include "../include/Pilot.hpp"
 
+#include <iostream>
+
 namespace r2d2{
     Pilot::Pilot(RobotStatus & robot_status):
-    robot_status(robot_status)
+        robot_status(robot_status),
+        shared_enabled(enabled)
     {}
+
+    void Pilot::start(){
+        SharedObject<bool>::Accessor(shared_enabled).access() = true;
+    }
+
+    void Pilot::stop(){
+        SharedObject<bool>::Accessor(shared_enabled).access() = false;
+    }
+
+    bool Pilot::get_enabled(){
+        return SharedObject<bool>::Accessor(shared_enabled).access();
+    }
 
 }

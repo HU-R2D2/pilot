@@ -69,8 +69,7 @@ namespace r2d2 {
         //!
         public:
         PilotSimulation(RobotStatus & robot_status, r2d2::Speed speed,
-                                Rotation rotation_speed,
-                                CoordinateAttitude waypoint);
+            Rotation rotation_speed, CoordinateAttitude waypoint);
 
         //!
         //!@brief      Interface function which will take care of the movement.
@@ -80,7 +79,7 @@ namespace r2d2 {
         //!            where the robot needs to go.
         //!
         virtual void go_to_position(
-        const CoordinateAttitude & coordinate_attitude) override;
+            const CoordinateAttitude & coordinate_attitude) override;
 
 
         //!

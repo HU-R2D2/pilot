@@ -77,8 +77,18 @@ namespace r2d2{
             virtual void go_to_position(
                 const CoordinateAttitude & coordinate_attitude) = 0;
 
+
+            void start();
+
+            void stop();
+
+            bool get_enabled();
+
         protected:
             RobotStatus & robot_status;
+        private:
+            bool enabled = false;
+            LockingSharedObject<bool> shared_enabled;
     };
 }
 #endif
