@@ -5,7 +5,7 @@
 //! \author Timon van den Brink 1664554
 //! \author Anas Shehata 1651951
 //! \date   Created: <30-03-16>
-//! \date   Last Modified: <02-06-16>
+//! \date   Last Modified: <06-08-16>
 //! \brief  In this file the PilotSimulation implementation can be found.
 //!
 //! \copyright Copyright © 2016, HU University of Applied Sciences Utrecht.

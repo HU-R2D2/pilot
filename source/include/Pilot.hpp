@@ -5,7 +5,7 @@
 //! \author Timon van den Brink 1664554
 //!         Anas Shehata 1651951
 //! \date   Created: <30-03-16>
-//! \date   Last Modified: <02-06-16>
+//! \date   Last Modified: <06-08-16>
 //! \brief  In this file the Pilot interface can be found.
 //!
 //! \copyright Copyright © 2016, HU University of Applied Sciences Utrecht.
@@ -51,8 +51,8 @@ namespace r2d2{
     //! @date       07-06-16
     //! @version    1.0
     //! @brief      Pilot is an abstraction for any movable vehicle.
-    //!             it contains 1 robot_status attribute  and is responsible
-    //!             for movement        
+    //!             it contains 1 robot_status attribute and is responsible
+    //!             for movement.
     //!
     class Pilot{
         public:
