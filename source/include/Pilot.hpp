@@ -77,11 +77,26 @@ namespace r2d2{
             virtual void go_to_position(
                 const CoordinateAttitude & coordinate_attitude) = 0;
 
-
+            //!
+            //!@brief   This function is used for turning on the Pilot.
+            //!         If the Pilot is enabled the pilot will constant try to
+            //!         move toward the given waypoint.
+            //!
             void start();
 
+            //!
+            //!@brief   This function is used for turning off the Pilot.
+            //!         If the Pilot is not enabled the pilot will
+            //!         not move at all.
+            //!
             void stop();
 
+            //!
+            //!@brief   This function returns true if the pilot is enabled
+            //!         used for turning on the Pilot.
+            //!
+            //!@return  bool enabled
+            //!
             bool get_enabled();
 
         protected:

@@ -81,16 +81,11 @@ namespace r2d2 {
         virtual void go_to_position(
             const CoordinateAttitude & coordinate_attitude) override;
 
-
         //!
-        //!@brief     function that periodically simulates the motor management
+        //!@brief     Function that periodically simulates the motor management
+        //!           if the Pilot is enabled.
         //!
         void run();
-
-        //!
-        //!@brief     checks if pilot has reached waypoint
-        //!@return    bool
-        bool has_reached_waypoint();
 
         private:
         Rotation rotation_speed;
