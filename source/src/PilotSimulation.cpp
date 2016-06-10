@@ -45,7 +45,7 @@
 namespace r2d2 {
 
     PilotSimulation::PilotSimulation(RobotStatus & robot_status,
-        r2d2::Speed speed, Rotation rotation_speed,
+        Speed speed, Rotation rotation_speed,
         CoordinateAttitude waypoint):
             Pilot(robot_status),
             speed(speed),
@@ -63,7 +63,7 @@ namespace r2d2 {
     void PilotSimulation::run() {
         std::this_thread::sleep_for(std::chrono::seconds(1));
         int period_ms = 100;
-        r2d2::Angle angle_precision_margin(0.087 * r2d2::Angle::rad);
+        Angle angle_precision_margin(0.087 * Angle::rad);
         while (true) {
             if (get_enabled()) {
                 //get access to waypoint
@@ -80,22 +80,22 @@ namespace r2d2 {
                     SharedObject < CoordinateAttitude >
                         ::Accessor(temp_robot_status).access();
 
-                r2d2::Coordinate & my_coordinate =
+                Coordinate & my_coordinate =
                    coordinate_attitude.coordinate;
-                r2d2::Angle & my_angle =
+                Angle & my_angle =
                    coordinate_attitude.attitude.angle_z;
 
                 //waypoint_angle between waypoint and current_position
-                r2d2::Translation my_translation(
+                Translation my_translation(
                     waypoint_data.coordinate.get_x() -
                        my_coordinate.get_x(),
                     waypoint_data.coordinate.get_y() -
-                       my_coordinate.get_y(), 0 * r2d2::Length::METER);
+                       my_coordinate.get_y(), 0 * Length::METER);
 
-                r2d2::Angle waypoint_angle =
+                Angle waypoint_angle =
                     std::atan2(my_translation.get_y()
-                    / r2d2::Length::METER, my_translation.get_x()
-                    / r2d2::Length::METER) * r2d2::Angle::rad;
+                    / Length::METER, my_translation.get_x()
+                    / Length::METER) * Angle::rad;
 
                 if (my_angle.get_angle() <= waypoint_angle.get_angle()
                        + angle_precision_margin.get_angle()
@@ -104,22 +104,22 @@ namespace r2d2 {
                     my_coordinate += {
                         (std::cos(my_angle.get_angle())
                             * speed
-                            / (r2d2::Length::METER
-                            / r2d2::Duration::SECOND))
-                            * r2d2::Length::METER,
+                            / (Length::METER
+                            / Duration::SECOND))
+                            * Length::METER,
                         (std::sin(my_angle.get_angle()) * speed
-                            / (r2d2::Length::METER
-                            / r2d2::Duration::SECOND))
-                            * r2d2::Length::METER,
-                        0 * r2d2::Length::METER
+                            / (Length::METER
+                            / Duration::SECOND))
+                            * Length::METER,
+                        0 * Length::METER
                     };
                 } else {
                     if (my_angle.get_angle() < waypoint_angle.get_angle()) {
                         my_angle += rotation_speed.rotation
-                        * r2d2::Angle::rad;
+                        * Angle::rad;
                     } else {
                         my_angle -= rotation_speed.rotation
-                        * r2d2::Angle::rad;
+                        * Angle::rad;
                     }
                 }
             }

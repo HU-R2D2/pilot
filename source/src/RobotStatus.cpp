@@ -49,7 +49,7 @@
 
 namespace r2d2{
     RobotStatus::RobotStatus(CoordinateAttitude & coordinate_attitude,
-        r2d2::Speed & speed):
+        Speed & speed):
     current_coordinate_attitude(coordinate_attitude),
     current_speed(speed)
     {}
@@ -59,7 +59,7 @@ namespace r2d2{
             return current_coordinate_attitude;
         }
 
-    LockingSharedObject<r2d2::Speed> & RobotStatus::get_current_speed() {
+    LockingSharedObject<Speed> & RobotStatus::get_current_speed() {
             return current_speed;
         }
 

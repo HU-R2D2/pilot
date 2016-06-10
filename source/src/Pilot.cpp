@@ -42,8 +42,6 @@
 
 #include "../include/Pilot.hpp"
 
-#include <iostream>
-
 namespace r2d2{
     Pilot::Pilot(RobotStatus & robot_status):
         robot_status(robot_status),

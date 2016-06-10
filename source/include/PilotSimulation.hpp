@@ -68,7 +68,7 @@ namespace r2d2 {
         //!            information about the robot.
         //!
         public:
-        PilotSimulation(RobotStatus & robot_status, r2d2::Speed speed,
+        PilotSimulation(RobotStatus & robot_status, Speed speed,
             Rotation rotation_speed, CoordinateAttitude waypoint);
 
         //!
@@ -89,7 +89,7 @@ namespace r2d2 {
 
         private:
         Rotation rotation_speed;
-        r2d2::Speed speed;
+        Speed speed;
         LockingSharedObject < CoordinateAttitude > waypoint;
     };
 }
