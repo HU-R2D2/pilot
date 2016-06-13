@@ -78,6 +78,8 @@ int main(int argc,char *argv[]){
     r2d2::PilotSimulation pilot_simulation(robot_status, speed, rotation_speed,
         waypoint);
 
+    //FIXED FOR NOW
+    /*
     std::thread pilot_simulation_thread(&r2d2::PilotSimulation::run,
         &pilot_simulation);
 
@@ -95,6 +97,6 @@ int main(int argc,char *argv[]){
 		}
 		pilot_simulation.go_to_position(new_waypoint);
 	}
-	pilot_simulation_thread.join();
+	pilot_simulation_thread.join();*/
     return 0;
 }
