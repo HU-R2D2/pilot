@@ -4,6 +4,50 @@
 #include <vector>
 #include <random>
 
+bool has_reached_waypoint(CoordinateAttitude & current_waypoint,
+    SharedObject<CoordinateAttitude> & robot_coordinate_attitude,
+    CoordinateAttitude waypoint_precision_margin){
+
+    CoordinateAttitude & coordinate_attitude_data =
+        SharedObject<CoordinateAttitude>
+        ::Accessor(robot_coordinate_attitude).access();
+
+    // check if the x coordinate is in range of the precision_margin
+    if (coordinate_attitude_data.coordinate.get_x() <
+        (current_waypoint.coordinate + r2d2::Translation{
+        waypoint_precision_margin.coordinate.get_x(), 0 *
+        r2d2::Length::METER, 0 * r2d2::Length::METER}).get_x() &&
+        coordinate_attitude_data.coordinate.get_x() >
+        (current_waypoint.coordinate -
+        r2d2::Translation{waypoint_precision_margin.coordinate.get_x(),
+        0 * r2d2::Length::METER, 0 * r2d2::Length::METER}).get_x()){
+
+        // check if the y coordinate is in range of the precision_margin
+        if (coordinate_attitude_data.coordinate.get_y() <
+            (current_waypoint.coordinate + r2d2::Translation{0 *
+            r2d2::Length::METER,
+            waypoint_precision_margin.coordinate.get_y(),0 *
+            r2d2::Length::METER}).get_y() &&
+            coordinate_attitude_data.coordinate.get_y() >
+            (current_waypoint.coordinate - r2d2::Translation{0 *
+            r2d2::Length::METER,
+            waypoint_precision_margin.coordinate.get_y(), 0 *
+            r2d2::Length::METER}).get_y()){
+
+            // check if the attitude yaw is in range of the percision_margin
+            if (coordinate_attitude_data.attitude.angle_z.get_angle() <
+                current_waypoint.attitude.angle_z.get_angle() +
+                waypoint_precision_margin.attitude.angle_z.get_angle() &&
+                coordinate_attitude_data.attitude.angle_z.get_angle() >
+                current_waypoint.attitude.angle_z.get_angle() -
+                waypoint_precision_margin.attitude.angle_z.get_angle()){
+                    return true;
+            }
+        }
+    }
+    return false;
+}
+
 int main(int argc,char *argv[]){
 
 	std::vector<CoordinateAttitude> psuedo_path;
@@ -27,7 +71,7 @@ int main(int argc,char *argv[]){
 	r2d2::RobotStatus robot_status(status, s);
 
 	r2d2::Speed speed = 1.0 * r2d2::Length::METER/r2d2::Duration::SECOND;
-	Rotation rotation_speed(0.1);
+	r2d2::Angle rotation_speed(0.1 * r2d2::Angle::rad);
 
 	CoordinateAttitude waypoint = {r2d2::Coordinate(), Attitude()};
 
@@ -40,7 +84,13 @@ int main(int argc,char *argv[]){
 	std::this_thread::sleep_for(std::chrono::seconds(5));
 
    	for(CoordinateAttitude new_waypoint : psuedo_path){
-		while(!pilot_simulation.has_reached_waypoint()){
+		while(!has_reached_waypoint(new_waypoint,
+            robot_status.get_current_coordinate_attitude(), {
+            r2d2::Coordinate(3.0 * r2d2::Length::METER, 3.0 *
+            r2d2::Length::METER, 0 * r2d2::Length::METER), Attitude(0 *
+            r2d2::Angle::rad, 0 * r2d2::Angle::rad,
+            0.087 * r2d2::Angle::rad)})){
+
 			std::this_thread::sleep_for(std::chrono::seconds(2));
 		}
 		pilot_simulation.go_to_position(new_waypoint);

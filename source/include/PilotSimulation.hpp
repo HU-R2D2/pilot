@@ -51,7 +51,7 @@
 namespace r2d2 {
 
     //! @author     Timon van den Brink 1664554
-    //! @autor           Anas Shehata 1651951
+    //! @autor      Anas Shehata 1651951
     //! @date       06-06-16
     //! @version    1.0
     //! @brief      The PilotSimulation class is a class that will simmulate
@@ -68,8 +68,8 @@ namespace r2d2 {
         //!            information about the robot.
         //!
         public:
-        PilotSimulation(RobotStatus & robot_status, r2d2::Speed speed,
-            Rotation rotation_speed, CoordinateAttitude waypoint);
+        PilotSimulation(RobotStatus & robot_status, Speed speed,
+            Angle rotation_speed, CoordinateAttitude waypoint);
 
         //!
         //!@brief      Interface function which will take care of the movement.
@@ -88,9 +88,9 @@ namespace r2d2 {
         void run();
 
         private:
-        Rotation rotation_speed;
-        r2d2::Speed speed;
-        LockingSharedObject < CoordinateAttitude > waypoint;
+        Angle rotation_speed;
+        Speed speed;
+        LockingSharedObject <CoordinateAttitude> waypoint;
     };
 }
 #endif

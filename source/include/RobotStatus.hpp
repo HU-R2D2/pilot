@@ -51,7 +51,7 @@
 #include <Speed.hpp>
 #include <LockingSharedObject.hpp>
 
-#include "stubs.hpp"
+#include "Stubs.hpp"
 
 namespace r2d2{
 
@@ -65,7 +65,7 @@ namespace r2d2{
             //!           will represent the robots current speed.
             //!
             RobotStatus(CoordinateAttitude & coordinate_attitude,
-                r2d2::Speed & speed);
+                Speed & speed);
 
             //!
             //!@brief     Getter for current_coordinate_attitude, returns a
@@ -79,11 +79,11 @@ namespace r2d2{
             //!@brief     Getter for current_speed,returns a reference to
             //!           LockingSharedObject current_speed.
             //!
-            LockingSharedObject<r2d2::Speed> & get_current_speed();
+            LockingSharedObject<Speed> & get_current_speed();
 
         private:
             LockingSharedObject<CoordinateAttitude> current_coordinate_attitude;
-            LockingSharedObject<r2d2::Speed> current_speed;
+            LockingSharedObject<Speed> current_speed;
     };
 }
 #endif
