@@ -43,6 +43,7 @@
 #include "../include/Pilot.hpp"
 
 namespace r2d2{
+    
     Pilot::Pilot(RobotStatus & robot_status):
         robot_status(robot_status),
         shared_enabled(enabled)

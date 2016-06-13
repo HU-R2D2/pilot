@@ -45,7 +45,7 @@
 namespace r2d2 {
 
     PilotSimulation::PilotSimulation(RobotStatus & robot_status,
-        Speed speed, Rotation rotation_speed,
+        Speed speed, Angle rotation_speed,
         CoordinateAttitude waypoint):
             Pilot(robot_status),
             speed(speed),
@@ -80,17 +80,14 @@ namespace r2d2 {
                     SharedObject < CoordinateAttitude >
                         ::Accessor(temp_robot_status).access();
 
-                Coordinate & my_coordinate =
-                   coordinate_attitude.coordinate;
-                Angle & my_angle =
-                   coordinate_attitude.attitude.angle_z;
+                Coordinate & my_coordinate = coordinate_attitude.coordinate;
+                Angle & my_angle = coordinate_attitude.attitude.angle_z;
 
                 //waypoint_angle between waypoint and current_position
                 Translation my_translation(
-                    waypoint_data.coordinate.get_x() -
-                       my_coordinate.get_x(),
-                    waypoint_data.coordinate.get_y() -
-                       my_coordinate.get_y(), 0 * Length::METER);
+                    waypoint_data.coordinate.get_x() - my_coordinate.get_x(),
+                    waypoint_data.coordinate.get_y() - my_coordinate.get_y(),
+                    0 * Length::METER);
 
                 Angle waypoint_angle =
                     std::atan2(my_translation.get_y()
@@ -102,29 +99,22 @@ namespace r2d2 {
                     && my_angle.get_angle() >= waypoint_angle.get_angle()
                        - angle_precision_margin.get_angle()) {
                     my_coordinate += {
-                        (std::cos(my_angle.get_angle())
-                            * speed
-                            / (Length::METER
-                            / Duration::SECOND))
-                            * Length::METER,
-                        (std::sin(my_angle.get_angle()) * speed
-                            / (Length::METER
-                            / Duration::SECOND))
-                            * Length::METER,
+
+                        (std::cos(my_angle.get_angle()) * speed / (Length::METER
+                            / Duration::SECOND)) * Length::METER,
+                        (std::sin(my_angle.get_angle()) * speed / (Length::METER
+                            / Duration::SECOND)) * Length::METER,
                         0 * Length::METER
                     };
                 } else {
                     if (my_angle.get_angle() < waypoint_angle.get_angle()) {
-                        my_angle += rotation_speed.rotation
-                        * Angle::rad;
+                        my_angle += rotation_speed;
                     } else {
-                        my_angle -= rotation_speed.rotation
-                        * Angle::rad;
+                        my_angle -= rotation_speed;
                     }
                 }
             }
-            std::this_thread::sleep_for(
-                std::chrono::milliseconds(period_ms));
+            std::this_thread::sleep_for(std::chrono::milliseconds(period_ms));
         }
     }
 }

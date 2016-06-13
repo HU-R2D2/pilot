@@ -51,7 +51,7 @@
 #include <Speed.hpp>
 #include <LockingSharedObject.hpp>
 
-#include "stubs.hpp"
+#include "Stubs.hpp"
 
 namespace r2d2{
 
