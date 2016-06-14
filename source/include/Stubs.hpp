@@ -1,5 +1,8 @@
-//! \addtogroup 0006 Pilot Simulation
-//! \brief PilotSimulation is a Pilot which will simulate a driving pilot.
+//! \addtogroup 0006 PilotSimulation
+//! \brief Pilot is an abstraction for any movable vehicle, By introducing the
+//! Pilot module to R2D2 movable robots are equipped with the Pilot interface.
+//! A Pilot module is responsible for controlling the motors. Hands movement
+//! occurs.
 //!
 //! \file   Stubs.hpp
 //! \author Timon van den Brink 1664554
