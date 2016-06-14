@@ -6,7 +6,7 @@
 //! \author Anas Shehata 1651951
 //! \date   Created: <30-03-16>
 //! \date   Last Modified: <06-08-16>
-//! \brief  In this file the PilotSimulation implementation can be found.
+//! \brief  In this file the Pilot interface can be found.
 //!
 //! \copyright Copyright � 2016, HU University of Applied Sciences Utrecht.
 //! All rights reserved.
@@ -43,7 +43,7 @@
 #include "../include/Pilot.hpp"
 
 namespace r2d2{
-    
+
     Pilot::Pilot(RobotStatus & robot_status):
         robot_status(robot_status),
         shared_enabled(enabled)

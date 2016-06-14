@@ -1,12 +1,13 @@
 //! \addtogroup 0006 Pilot Simulation
 //! \brief PilotSimulation is a Pilot which will simulate a driving pilot.
 //!
-//! \file   stubs.hpp
+//! \file   Stubs.hpp
 //! \author Timon van den Brink 1664554
 //!  Anas Shehata 1651951
 //! \date   Created: <30-03-16>
 //! \date   Last Modified: <06-08-16>
-//! \brief  In this file the PilotSimulation implementation can be found.
+//! \brief  In this file stubs used in the Pilot until the official classes are
+//! released
 //!
 //! \copyright Copyright � 2016, HU University of Applied Sciences Utrecht.
 //! All rights reserved.

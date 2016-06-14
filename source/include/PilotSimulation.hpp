@@ -1,7 +1,7 @@
 //! \addtogroup 0006 Pilot Simulation
 //! \brief PilotSimulation is a Pilot which will simulate a driving pilot.
 //!
-//! \file   Pilot.hpp
+//! \file   PilotSimulation.hpp
 //! \author Timon van den Brink 1664554
 //! \author Anas Shehata 1651951
 //! \date   Created: <30-03-16>

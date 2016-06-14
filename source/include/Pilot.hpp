@@ -3,7 +3,7 @@
 //!
 //! \file   Pilot.hpp
 //! \author Timon van den Brink 1664554
-//!         Anas Shehata 1651951
+//! \author Anas Shehata 1651951
 //! \date   Created: <30-03-16>
 //! \date   Last Modified: <06-08-16>
 //! \brief  In this file the Pilot interface can be found.
