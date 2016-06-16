@@ -101,7 +101,7 @@ int main(int argc,char *argv[]){
         Attitude & my_attitude = coordinate_attitude.attitude;
         r2d2::Coordinate & my_coordinate = coordinate_attitude.coordinate;
 
-        std:cout << "waypoint:    " << new_waypoint
+        std::cout << "waypoint:    " << new_waypoint
             .coordinate << " "  << new_waypoint.attitude.angle_z << std::endl;
 
         std::cout << "RobotStatus: " << coordinate_attitude.coordinate << " "
