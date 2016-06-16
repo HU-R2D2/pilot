@@ -7,7 +7,7 @@ file(GLOB SOURCES_EXAMPLES "examples/*.cpp" "examples/*.hpp")
 file(GLOB SOURCES_GTEST "source/src/*.cpp" "source/include/*.hpp" "../adt/source/src/*.cpp" "../adt/source/include/*.hpp" "../sharedobjects/source/src/*.cpp" "../sharedobjects/source/include/*.hpp" "test/*.cpp" "test/*.hpp")
 list(REMOVE_ITEM SOURCES_GTEST ${CMAKE_CURRENT_SOURCE_DIR}/source/src/main.cpp)
 
-SET( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -std=gnu++11" )
+SET( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -lpthread -std=gnu++11" )
 
 include_directories(
   ../adt/source/include
