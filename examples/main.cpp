@@ -78,25 +78,39 @@ int main(int argc,char *argv[]){
     r2d2::PilotSimulation pilot_simulation(robot_status, speed, rotation_speed,
         waypoint);
 
-    //FIXED FOR NOW
-    /*
     std::thread pilot_simulation_thread(&r2d2::PilotSimulation::run,
         &pilot_simulation);
 
-	std::this_thread::sleep_for(std::chrono::seconds(5));
+    for(CoordinateAttitude new_waypoint : psuedo_path){
+        pilot_simulation.go_to_position(new_waypoint);
 
-   	for(CoordinateAttitude new_waypoint : psuedo_path){
-		while(!has_reached_waypoint(new_waypoint,
+        while(!has_reached_waypoint(new_waypoint,
             robot_status.get_current_coordinate_attitude(), {
             r2d2::Coordinate(3.0 * r2d2::Length::METER, 3.0 *
             r2d2::Length::METER, 0 * r2d2::Length::METER), Attitude(0 *
             r2d2::Angle::rad, 0 * r2d2::Angle::rad,
             0.087 * r2d2::Angle::rad)})){
 
-			std::this_thread::sleep_for(std::chrono::seconds(2));
-		}
-		pilot_simulation.go_to_position(new_waypoint);
-	}
-	pilot_simulation_thread.join();*/
+        LockingSharedObject<CoordinateAttitude> & temp_robot_status =
+            robot_status.get_current_coordinate_attitude();
+
+        CoordinateAttitude & coordinate_attitude =
+            SharedObject<CoordinateAttitude>::Accessor(temp_robot_status)
+            .access();
+
+        Attitude & my_attitude = coordinate_attitude.attitude;
+        r2d2::Coordinate & my_coordinate = coordinate_attitude.coordinate;
+
+        std:cout << "waypoint:    " << new_waypoint
+            .coordinate << " "  << new_waypoint.attitude.angle_z << std::endl;
+
+        std::cout << "RobotStatus: " << coordinate_attitude.coordinate << " "
+            << coordinate_attitude.attitude.angle_z << std::endl;
+
+
+        std::this_thread::sleep_for(std::chrono::microseconds(500000));
+        }
+    }
+    pilot_simulation_thread.join();
     return 0;
 }

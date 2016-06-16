@@ -86,7 +86,7 @@ namespace r2d2 {
 
         //!
         //!@brief     Function that periodically simulates the motor management
-        //!           if the Pilot is enabled.
+        //!           if the Pilot is enabled. This function is a blocking call
         //!
         void run();
 

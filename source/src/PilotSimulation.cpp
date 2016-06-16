@@ -96,7 +96,7 @@ namespace r2d2 {
                     std::atan2(my_translation.get_y()
                     / Length::METER, my_translation.get_x()
                     / Length::METER) * Angle::rad;
-
+                // check if angle is in range of the waypoint, then move forward
                 if (my_angle.get_angle() <= waypoint_angle.get_angle()
                        + angle_precision_margin.get_angle()
                     && my_angle.get_angle() >= waypoint_angle.get_angle()
@@ -109,9 +109,13 @@ namespace r2d2 {
                             / Duration::SECOND)) * Length::METER,
                         0 * Length::METER
                     };
+                // if not angle in range of waypoint, turn wards the waypoint
+                // angle
                 } else {
+                    // turn clockwise
                     if (my_angle.get_angle() < waypoint_angle.get_angle()) {
                         my_angle += rotation_speed;
+                    // turn counter clockwise
                     } else {
                         my_angle -= rotation_speed;
                     }

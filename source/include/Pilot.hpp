@@ -103,6 +103,9 @@ namespace r2d2{
             bool get_enabled();
 
         protected:
+            //! @param     robot_status is a reference to an object of type
+            //!            RobotStatusCoordinateAttitude which contains the
+            //!            current waypoint of the Pilot is following.
             RobotStatus & robot_status;
         private:
             bool enabled = false;
